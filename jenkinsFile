@@ -19,7 +19,7 @@ pipeline {
                     npm ci
                     npm run build
                     ls -la
-                ''',
+                '''
                 sh '''
                     if [ -e ./build/index.html ]
                     then
@@ -31,12 +31,5 @@ pipeline {
                 '''
             }
         }
-        stage('Test') {
-            steps {
-                sh '''
-                        echo "ok"
-                    '''
-            }
-        }   
     }
 }
