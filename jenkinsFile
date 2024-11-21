@@ -2,6 +2,8 @@ pipeline {
     agent any
 
     stages {
+        // Start with a build
+        /*
         stage('Build') {
             agent {
                 docker {
@@ -22,6 +24,10 @@ pipeline {
                 '''
             }
         }
+        */
+        /*
+            this stage does existing steps
+        */
          stage('Test') {
             agent {
                 docker {
@@ -34,6 +40,7 @@ pipeline {
                 sh '''
                     test -f ./build/index.html
                     npm test
+                    ls -la
                 '''
             }
         }
