@@ -81,29 +81,29 @@ pipeline {
             }
          }
 
-        stage('Deploy Stage') {
-            agent {
-                docker {
-                    image 'node:18-alpine'
-                    reuseNode true
-                }
+        // stage('Deploy Stage') {
+        //     agent {
+        //         docker {
+        //             image 'node:18-alpine'
+        //             reuseNode true
+        //         }
 
-            }
-            steps {
-                sh '''
-                    npm install netlify-cli node-jq
-                    node_modules/.bin/netlify --version
-                    echo "Deploying to stage. Site ID: $NETLIFY_SITE_ID"
-                    node_modules/.bin/netlify status
-                    node_modules/.bin/netlify deploy --dir=build --json > deploy_stage.json
-                '''
-             script {
-                env.STAGE_URL = sh(script: "node_modules/.bin/node-jq -r '.deploy_url' deploy_stage.json", returnStdout: true)
-                }
-            }
+        //     }
+        //     steps {
+        //         sh '''
+        //             npm install netlify-cli node-jq
+        //             node_modules/.bin/netlify --version
+        //             echo "Deploying to stage. Site ID: $NETLIFY_SITE_ID"
+        //             node_modules/.bin/netlify status
+        //             node_modules/.bin/netlify deploy --dir=build --json > deploy_stage.json
+        //         '''
+        //      script {
+        //         env.STAGE_URL = sh(script: "node_modules/.bin/node-jq -r '.deploy_url' deploy_stage.json", returnStdout: true)
+        //         }
+        //     }
 
-        }
-        stage('Staging E2E') {
+        // }
+        stage('DeployStaging') {
             
             agent {
                 docker {
@@ -111,13 +111,17 @@ pipeline {
                     reuseNode true
                 }
             }
-            environment {
-                // NETLIFY_SITE_ID = '3f027c83-fc4d-4298-9c9f-ef0f3dc0f9dc'
-                // NETLIFY_AUTH_TOKEN = credentials('netlify-token')
-                CI_ENVIRONMENT_URL = "${env.STAGE_URL}"
-            }
+            // environment {
+            //     CI_ENVIRONMENT_URL = "${env.STAGE_URL}"
+            // }
             steps {
                 sh '''
+                    npm install netlify-cli node-jq
+                    node_modules/.bin/netlify --version
+                    echo "Deploying to stage. Site ID: $NETLIFY_SITE_ID"
+                    node_modules/.bin/netlify status
+                    node_modules/.bin/netlify deploy --dir=build --json > deploy_stage.json
+                    CI_ENVIRONMENT_URL =$(node_modules/.bin/node-jq -r '.deploy_url' deploy_stage.json)
                     npx playwright test --reporter=html 
                 '''
             }
