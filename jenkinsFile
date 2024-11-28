@@ -111,9 +111,9 @@ pipeline {
                     reuseNode true
                 }
             }
-            // environment {
-            //     CI_ENVIRONMENT_URL = "${env.STAGE_URL}"
-            // }
+            environment {
+                CI_ENVIRONMENT_URL = "CI Env NOT SET"
+            }
             steps {
                 sh '''
                     npm install netlify-cli node-jq
