@@ -11,24 +11,7 @@ pipeline {
     }
 
     stages {
-         stage('Deploy to AWS') {
-                agent {
-                    docker {
-                        image 'amazon/aws-cli'
-                        reuseNode true
-                        args "-u 0 --entrypoint=''"
-                    }
-                }
-                steps {
-                    withCredentials([usernamePassword(credentialsId: 'my-aws', passwordVariable: 'AWS_SECRET_ACCESS_KEY', usernameVariable: 'AWS_ACCESS_KEY_ID')]) {
-                        sh '''
-                            aws --version
-                            yum install jq -y
-                            aws ecs update-service --cluster $AWS_ECS_CLUSTER --region us-east-1 --service jenkins-service --task-definition $AWS_ECS_SERVICE:$(aws ecs register-task-definition --cli-input-json file://aws/task-def-prod.json | jq '.taskDefinition.revision')
-                      '''
-                    }
-                }
-            }
+
         stage('Build') {
             agent {
                 docker {
@@ -49,6 +32,28 @@ pipeline {
                 '''
             }
         }
-
+        stage('Build Docker Image') {
+            steps {
+                sh 'docker build  -t my-jenkinsapp .' 
+            }
+        }
+         stage('Deploy to AWS') {
+                agent {
+                    docker {
+                        image 'amazon/aws-cli'
+                        reuseNode true
+                        args "-u 0 --entrypoint=''"
+                    }
+                }
+                steps {
+                    withCredentials([usernamePassword(credentialsId: 'my-aws', passwordVariable: 'AWS_SECRET_ACCESS_KEY', usernameVariable: 'AWS_ACCESS_KEY_ID')]) {
+                        sh '''
+                            aws --version
+                            yum install jq -y
+                            aws ecs update-service --cluster $AWS_ECS_CLUSTER --region us-east-1 --service jenkins-service --task-definition $AWS_ECS_SERVICE:$(aws ecs register-task-definition --cli-input-json file://aws/task-def-prod.json | jq '.taskDefinition.revision')
+                      '''
+                    }
+                }
+            }
      }
 }
