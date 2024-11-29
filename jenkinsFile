@@ -5,6 +5,7 @@ pipeline {
 
         REACT_APP_VERSION =  "1.2.$BUILD_ID"
         AWS_DEFAULT_REGION = "us-east-1"
+        WAIT_INTERVAL = 60
     }
 
     stages {
