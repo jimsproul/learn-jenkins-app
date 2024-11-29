@@ -21,7 +21,7 @@ pipeline {
                         sh '''
                             aws --version
                             yum install jq -y
-                            LATEST_TD_DEF = $(aws ecs register-task-definition --cli-input-json file://aws/task-def-prod.json | jq '.taskDefintion,revision')
+                            LATEST_TD_DEF = $(aws ecs register-task-definition --cli-input-json file://aws/task-def-prod.json | jq '.taskDefintion.revision')
                             aws ecs update-service --cluster jenkins-clstr-prod --region us-east-1 --service learnjenkinsapp-service-prod --task-definition jenkins-taskdef-prod:$LATEST_TD_DEF
                       '''
                     }
