@@ -23,7 +23,6 @@ pipeline {
                             aws --version
                             yum install jq -y
                             aws ecs update-service --cluster jenkins-cluster --region us-east-1 --service jenkins-service --task-definition jenkins-td-family:$(aws ecs register-task-definition --cli-input-json file://aws/task-def-prod.json | jq '.taskDefinition.revision')
-                            aws ecs wait services-stable --cluster jenkins-cluster  --services jenkins-service
                       '''
                     }
                 }
