@@ -2,13 +2,13 @@
     "requiresCompatibilities": [
         "FARGATE"
     ],
-    "family": "jenkins-taskdef-prod",
+    "family": "jenkins-td-family",
     "containerDefinitions": [
         {
-            "name": "learnjenkinsapp",
+            "name": "jenkins-td",
             "image": "nginx:1.27-slim",
             "portMappings": [{
-                "name":"nginx-80-tcp",
+                "name":"jenkins-td-tcp",
                 "containerPort": 80,
                 "hostPort": 80,
                 "protocol": "tcp",
