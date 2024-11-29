@@ -6,6 +6,8 @@ pipeline {
         REACT_APP_VERSION =  "1.2.$BUILD_ID"
         AWS_DEFAULT_REGION = "us-east-1"
         WAIT_INTERVAL = 60
+        AWS_ECS_CLUSTER = 'jenkins-cluster'
+        AWS_ECS_SERVICE = 'jenkins-td-family'
     }
 
     stages {
@@ -22,7 +24,7 @@ pipeline {
                         sh '''
                             aws --version
                             yum install jq -y
-                            aws ecs update-service --cluster jenkins-cluster --region us-east-1 --service jenkins-service --task-definition jenkins-td-family:$(aws ecs register-task-definition --cli-input-json file://aws/task-def-prod.json | jq '.taskDefinition.revision')
+                            aws ecs update-service --cluster $AWS_ECS_CLUSTER --region us-east-1 --service jenkins-service --task-definition $AWS_ECS_SERVICE:$(aws ecs register-task-definition --cli-input-json file://aws/task-def-prod.json | jq '.taskDefinition.revision')
                       '''
                     }
                 }
