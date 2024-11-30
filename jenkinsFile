@@ -4,11 +4,12 @@ pipeline {
     environment {
 
         REACT_APP_VERSION =  "1.2.$BUILD_ID"
-        APP_NAME = "learningjenkins"
+        APP_NAME = "learn_jenkins_app"
         AWS_DEFAULT_REGION = "us-east-1"
         WAIT_INTERVAL = 60
         AWS_ECS_CLUSTER = 'jenkins-cluster'
         AWS_ECS_SERVICE = 'jenkins-td-family'
+        AWS_ECR = '806993989600.dkr.ecr.us-east-1.amazonaws.com/jenkins'
     }
 
     stages {
@@ -43,7 +44,7 @@ pipeline {
                 }
             steps {
                 sh '''
-                    docker build  -t $APP_NAME:$REACT_APP_VERSION .
+                    docker build  -t $APP_ECR/$APP_NAME:$REACT_APP_VERSION .
                 ''' 
             }
         }
