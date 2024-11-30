@@ -9,7 +9,7 @@ pipeline {
         WAIT_INTERVAL = 60
         AWS_ECS_CLUSTER = 'jenkins-cluster'
         AWS_ECS_SERVICE = 'jenkins-td-family'
-        AWS_ECR = '806993989600.dkr.ecr.us-east-1.amazonaws.com/jenkins'
+        AWS_ECR = '806993989600.dkr.ecr.us-east-1.amazonaws.com'
     }
 
     stages {
