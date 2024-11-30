@@ -6,7 +6,7 @@
     "containerDefinitions": [
         {
             "name": "jenkins-td",
-            "image": "806993989600.dkr.ecr.us-east-1.amazonaws.com/learnjenkinsapp:1.2.155",
+            "image": "806993989600.dkr.ecr.us-east-1.amazonaws.com/learnjenkinsapp:#APP_VERSION#",
             "portMappings": [{
                 "name":"jenkins-td-tcp",
                 "containerPort": 80,

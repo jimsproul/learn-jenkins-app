@@ -66,6 +66,7 @@ pipeline {
                     withCredentials([usernamePassword(credentialsId: 'my-aws', passwordVariable: 'AWS_SECRET_ACCESS_KEY', usernameVariable: 'AWS_ACCESS_KEY_ID')]) {
                         sh '''
                             aws --version
+                            sed -i "s/#APP_VERSION#/$REACT_APP_VERSION/g" aws/task-def-prod.json
                             aws ecs update-service --cluster $AWS_ECS_CLUSTER --region us-east-1 --service jenkins-service --task-definition $AWS_ECS_SERVICE:$(aws ecs register-task-definition --cli-input-json file://aws/task-def-prod.json | jq '.taskDefinition.revision')
                       '''
                     }
