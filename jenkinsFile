@@ -44,7 +44,7 @@ pipeline {
                 }
             steps {
                 sh '''
-                    docker build  -t $APP_ECR/$APP_NAME:$REACT_APP_VERSION .
+                    docker build  -t $AWS_ECR/$APP_NAME:$REACT_APP_VERSION .
                     docker push $AWS_ECR/$APP_NAME:$REACT_APP_VERSION 
                 ''' 
             }
